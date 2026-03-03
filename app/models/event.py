@@ -14,5 +14,5 @@ class Event(Base):
     date       = Column(TIMESTAMP, nullable=False)
     created_at = Column(TIMESTAMP, server_default="now()", nullable=False)
 
-    # Relationship to seats
+    # Relationship
     seats = relationship("Seat", back_populates="event")

@@ -1,5 +1,6 @@
 from fastapi import HTTPException, status
 
+# ── Auth exceptions ───────────────────────────────
 class InvalidCredentialsException(HTTPException):
     def __init__(self):
         super().__init__(
@@ -56,4 +57,69 @@ class EmailNotVerifiedException(HTTPException):
         super().__init__(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Please verify your email first. Check your inbox for OTP."
+        )
+
+# ── Booking exceptions ────────────────────────────
+class SeatNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Seat not found"
+        )
+
+class SeatNotAvailableException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Seat is not available. Please choose another seat."
+        )
+
+class BookingNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Booking not found"
+        )
+
+class BookingNotOwnedException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="This booking does not belong to you"
+        )
+
+class BookingNotCancellableException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only PENDING bookings can be cancelled"
+        )
+
+class BookingExpiredException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Booking has expired. Please reserve the seat again."
+        )
+
+# ── Payment exceptions ────────────────────────────
+class DuplicatePaymentException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Payment already processed for this booking"
+        )
+
+class BookingAlreadyPaidException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This booking has already been paid"
+        )
+        
+class PaymentNotFoundException(HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Payment not found"
         )

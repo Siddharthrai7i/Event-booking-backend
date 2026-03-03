@@ -20,7 +20,7 @@ class Booking(Base):
     status     = Column(Enum(BookingStatus), nullable=False,
                        default=BookingStatus.PENDING,
                        server_default="PENDING")
-    payment_id = Column(UUID(as_uuid=True), nullable=True)  # ← No FK yet, added later
+    payment_id = Column(UUID(as_uuid=True), nullable=True)
     expires_at = Column(TIMESTAMP, nullable=False)
     created_at = Column(TIMESTAMP, server_default="now()", nullable=False)
 
@@ -28,5 +28,5 @@ class Booking(Base):
     user    = relationship("User", back_populates="bookings")
     seat    = relationship("Seat", back_populates="booking")
     payment = relationship("Payment", back_populates="booking",
-                          primaryjoin="Booking.payment_id == Payment.id",
-                          foreign_keys="Booking.payment_id")
+                          primaryjoin="Booking.payment_id == foreign(Payment.id)",
+                          uselist=False)

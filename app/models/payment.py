@@ -8,6 +8,7 @@ from app.db.base import Base
 class PaymentStatus(str, enum.Enum):
     SUCCESS = "SUCCESS"
     FAILED  = "FAILED"
+    PENDING = "PENDING"
 
 class Payment(Base):
     __tablename__ = "payments"
@@ -15,7 +16,7 @@ class Payment(Base):
     id              = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     booking_id      = Column(UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False)
     amount          = Column(Numeric(10, 2), nullable=False)
-    status          = Column(Enum(PaymentStatus), nullable=False)
+    status          = Column(Enum(PaymentStatus), nullable=False, default=PaymentStatus.PENDING)
     idempotency_key = Column(String(255), unique=True, nullable=False)
     created_at      = Column(TIMESTAMP, server_default="now()", nullable=False)
 
