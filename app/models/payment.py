@@ -13,12 +13,14 @@ class PaymentStatus(str, enum.Enum):
 class Payment(Base):
     __tablename__ = "payments"
 
-    id              = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    booking_id      = Column(UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False)
-    amount          = Column(Numeric(10, 2), nullable=False)
-    status          = Column(Enum(PaymentStatus), nullable=False, default=PaymentStatus.PENDING)
-    idempotency_key = Column(String(255), unique=True, nullable=False)
-    created_at      = Column(TIMESTAMP, server_default="now()", nullable=False)
+    id                   = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    booking_id           = Column(UUID(as_uuid=True), ForeignKey("bookings.id"), nullable=False)
+    amount               = Column(Numeric(10, 2), nullable=False)
+    status               = Column(Enum(PaymentStatus), nullable=False, default=PaymentStatus.PENDING)
+    idempotency_key      = Column(String(255), unique=True, nullable=False)
+    razorpay_order_id    = Column(String(255), nullable=True)
+    razorpay_payment_id  = Column(String(255), nullable=True)
+    created_at           = Column(TIMESTAMP, server_default="now()", nullable=False)
 
     # Relationship
     booking = relationship("Booking", back_populates="payment",
